@@ -3,8 +3,6 @@ package back.service.impl;
 import back.dto.BookDto;
 import back.dto.ChapterBookDto;
 import back.dto.ShortBookDto;
-import back.entity.Book;
-import back.repository.BookRepository;
 import back.service.BookService;
 import org.springframework.stereotype.Service;
 

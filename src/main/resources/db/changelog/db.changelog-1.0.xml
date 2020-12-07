@@ -6,4 +6,5 @@
     <property name="blob_type" value="bytea" dbms="postgresql"/>
     <property name="blob_type" value="blob" dbms="h2"/>
 
+
 </databaseChangeLog>
