@@ -1,5 +1,6 @@
-package back.error;
+package back.exception;
 
+import back.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

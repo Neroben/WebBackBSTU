@@ -1,4 +1,4 @@
-package back.error;
+package back.exception;
 
 import java.util.Arrays;
 
