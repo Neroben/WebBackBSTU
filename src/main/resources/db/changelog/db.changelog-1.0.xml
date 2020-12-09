@@ -6,5 +6,88 @@
     <property name="blob_type" value="bytea" dbms="postgresql"/>
     <property name="blob_type" value="blob" dbms="h2"/>
 
+    <changeSet id="01" author="Dontsov">
+        <createTable tableName="users">
+            <column name="id" autoIncrement="true" type="BIGINT" >
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="imageUrl" type="varchar(512)"/>
+            <column name="emailVerified" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="varchar(512)"/>
+            <column name="provider" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="providerId" type="varchar(60)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="roles">
+            <column name="id" remarks="ID" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="role_pkey"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints unique="true" uniqueConstraintName="role_name_uk"/>
+            </column>
+        </createTable>
+        <createTable tableName="user2role">
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="user2role_pkey"
+                             references="users(id)" foreignKeyName="user2role_user_fk"
+                />
+            </column>
+            <column name="role_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="user2role_pkey"
+                             references="roles(id)" foreignKeyName="user2role_role_fk"/>
+            </column>
+        </createTable>
+        <createTable tableName="books">
+            <column name="id" remarks="ID" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="book_pkey"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(2048)"/>
+            <column name="author" type="varchar(512)"/>
+        </createTable>
+        <createTable tableName="genres">
+            <column name="id" remarks="ID" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="genre_pkey"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints unique="true" uniqueConstraintName="genres_name_uk"/>
+            </column>
+        </createTable>
+        <createTable tableName="book2genre">
+            <column name="book_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="book2genre_pkey"
+                             references="users(id)" foreignKeyName="book2genre_book_fk"
+                />
+            </column>
+            <column name="genre_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="book2genre_pkey"
+                             references="roles(id)" foreignKeyName="book2genre_genre_fk"/>
+            </column>
+        </createTable>
+        <createTable tableName="page_books">
+            <column name="id" remarks="ID" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="page_book_pkey"/>
+            </column>
+            <column name="file_path" type="varchar(512)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="num_page" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="book_id" type="BIGINT">
+                <constraints nullable="false" references="books(id)" foreignKeyName="page_books_fk"/>
+            </column>
+        </createTable>
+    </changeSet>
 
 </databaseChangeLog>

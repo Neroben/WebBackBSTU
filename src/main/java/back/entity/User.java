@@ -12,11 +12,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -44,6 +45,13 @@ public class User extends AbstractEntity{
     private String provider;
 
     private String providerId;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "user2role",
+            joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id",
+                    referencedColumnName = "id"))
+    private List<Role> roles;
 
     public Long getId() {
         return id;

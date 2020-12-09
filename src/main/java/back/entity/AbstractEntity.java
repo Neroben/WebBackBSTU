@@ -18,6 +18,4 @@ public abstract class AbstractEntity implements Serializable {
     @GeneratedValue
     private Long id;
 
-    private LocalDateTime createDate;
-
 }
