@@ -2,7 +2,6 @@ package back.security.oauth2.user;
 
 import back.exception.OAuth2AuthenticationProcessingException;
 
-import java.security.AuthProvider;
 import java.util.Map;
 
 public class OAuth2UserInfoFactory {

@@ -1,11 +1,15 @@
-package back.security;
+package back.security.oauth2;
 
+import back.entity.User;
+import back.exception.OAuth2AuthenticationProcessingException;
+import back.repository.UserRepository;
+import back.security.UserPrincipal;
 import back.security.oauth2.user.OAuth2UserInfo;
 import back.security.oauth2.user.OAuth2UserInfoFactory;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,6 +19,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2UserAuthority;
+import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
@@ -22,13 +27,13 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.naming.AuthenticationException;
 import javax.security.auth.message.AuthException;
-import java.nio.file.attribute.UserPrincipal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
+@Service
+@RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
+
+    private final UserRepository userRepository;
 
     @SneakyThrows
     @Override
@@ -51,8 +56,36 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) throws AuthenticationException  {
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(oAuth2UserRequest.getClientRegistration().getRegistrationId(), oAuth2User.getAttributes());
-        //...
-        return CustomUserPrincipal.create(socialUser, oAuth2User.getAttributes());
+        User socialUser;
+        Optional<User> userOptional = userRepository.findByEmail(oAuth2UserInfo.getEmail());
+        if(userOptional.isPresent()) {
+            socialUser = userOptional.get();
+            if (!socialUser.getProvider().equals(oAuth2UserRequest.getClientRegistration().getRegistrationId()))
+                throw new OAuth2AuthenticationProcessingException("Looks like you're signed up with " +
+                        socialUser.getProvider() + " account. Please use your " + socialUser.getProvider() +
+                        " account to login.");
+            socialUser = updateExistingUser(socialUser, oAuth2UserInfo);
+        } else
+            socialUser = registerNewUser(oAuth2UserRequest, oAuth2UserInfo);
+
+        return UserPrincipal.create(socialUser, oAuth2User.getAttributes());
+    }
+
+    private User registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo) {
+        User user = new User();
+
+        user.setProvider(oAuth2UserRequest.getClientRegistration().getRegistrationId());
+        user.setProviderId(oAuth2UserInfo.getId());
+        user.setName(oAuth2UserInfo.getName());
+        user.setEmail(oAuth2UserInfo.getEmail());
+        user.setImageUrl(oAuth2UserInfo.getImageUrl());
+        return userRepository.save(user);
+    }
+
+    private User updateExistingUser(User existingUser, OAuth2UserInfo oAuth2UserInfo) {
+        existingUser.setName(oAuth2UserInfo.getName());
+        existingUser.setImageUrl(oAuth2UserInfo.getImageUrl());
+        return userRepository.save(existingUser);
     }
 
     private OAuth2User loadVkUser(OAuth2UserRequest oAuth2UserRequest) {
@@ -72,15 +105,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             ArrayList<?> valueList = (ArrayList<?>) response.get("response");
             Map<String, Object> userAttributes = (Map<String, Object>) valueList.get(0);
             userAttributes.put(userNameAttributeName, oAuth2UserRequest.getAdditionalParameters().get(userNameAttributeName));
-            //      ......
 
             Set<GrantedAuthority> authorities = Collections.singleton(new OAuth2UserAuthority(userAttributes));
             return new DefaultOAuth2User(authorities, userAttributes, userNameAttributeName);
 
         } catch (HttpClientErrorException ex) {
             ex.printStackTrace();
-            throw new BaseRuntimeException(ex.getMessage(), HttpStatus.UNAUTHORIZED);
+            throw new OAuth2AuthenticationProcessingException(ex.getMessage());
         }
-    }
     }
 }
