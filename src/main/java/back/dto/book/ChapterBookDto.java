@@ -1,5 +1,8 @@
-package back.dto;
+package back.dto.book;
 
+import lombok.Data;
+
+@Data
 public class ChapterBookDto {
 
     private Long bookId;

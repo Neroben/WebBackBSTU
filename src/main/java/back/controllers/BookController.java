@@ -1,8 +1,8 @@
 package back.controllers;
 
-import back.dto.BookDto;
-import back.dto.ChapterBookDto;
-import back.dto.ShortBookDto;
+import back.dto.book.BookDto;
+import back.dto.book.ChapterBookDto;
+import back.dto.book.ShortBookDto;
 import back.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
