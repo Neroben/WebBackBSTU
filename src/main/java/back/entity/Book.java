@@ -14,6 +14,9 @@ public class Book extends AbstractEntity {
 
     private String description;
 
+    @Column(name = "path_logo")
+    private String pathLogo;
+
     @OneToMany(mappedBy = "bookId")
     private List<PageBook> filePath;
 

@@ -55,6 +55,7 @@
             <column name="name" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="path_logo" type="varchar(255)"/>
             <column name="description" type="varchar(2048)"/>
             <column name="author" type="varchar(512)"/>
         </createTable>
