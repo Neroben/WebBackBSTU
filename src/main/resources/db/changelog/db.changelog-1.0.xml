@@ -14,15 +14,18 @@
             <column name="name" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="imageUrl" type="varchar(512)"/>
-            <column name="emailVerified" type="BOOLEAN">
+            <column name="image_url" type="varchar(512)"/>
+            <column name="email" type="varchar(100)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="email_verified" type="BOOLEAN">
                 <constraints nullable="false"/>
             </column>
             <column name="password" type="varchar(512)"/>
             <column name="provider" type="varchar(30)">
                 <constraints nullable="false"/>
             </column>
-            <column name="providerId" type="varchar(60)">
+            <column name="provider_id" type="varchar(60)">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -88,6 +91,17 @@
                 <constraints nullable="false" references="books(id)" foreignKeyName="page_books_fk"/>
             </column>
         </createTable>
+    </changeSet>
+
+    <changeSet id="02" author="Dontsov">
+        <insert tableName="roles">
+            <column name="name">ROLE_USER</column>
+            <column name="id">1</column>
+        </insert>
+        <insert tableName="roles">
+            <column name="name">ROLE_ADMIN</column>
+            <column name="id">2</column>
+        </insert>
     </changeSet>
 
 </databaseChangeLog>

@@ -1,6 +1,7 @@
 package back.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -10,10 +11,11 @@ import java.util.List;
 @Table(name = "roles")
 @Getter
 @Setter
+@NoArgsConstructor
 public class Role extends AbstractEntity {
 
-    public static final String ROLE_USER = "ROLE_USER";
-    public static final String ROLE_ADMIN = "ROLE_ADMIN";
+    public static final Long ROLE_USER = 1L;
+    public static final Long ROLE_ADMIN = 2L;
 
     private String name;
 
@@ -23,5 +25,9 @@ public class Role extends AbstractEntity {
             inverseJoinColumns = @JoinColumn(name = "role_id",
                     referencedColumnName = "id"))
     private List<User> user;
+
+    public Role(Long id){
+        this.setId(id);
+    }
 
 }

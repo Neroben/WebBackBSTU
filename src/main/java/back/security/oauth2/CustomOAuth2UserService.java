@@ -1,5 +1,6 @@
 package back.security.oauth2;
 
+import back.entity.Role;
 import back.entity.User;
 import back.exception.OAuth2AuthenticationProcessingException;
 import back.repository.UserRepository;
@@ -57,7 +58,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private OAuth2User processOAuth2User(OAuth2UserRequest oAuth2UserRequest, OAuth2User oAuth2User) throws AuthenticationException  {
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(oAuth2UserRequest.getClientRegistration().getRegistrationId(), oAuth2User.getAttributes());
         User socialUser;
-        Optional<User> userOptional = userRepository.findByEmail(oAuth2UserInfo.getEmail());
+        Optional<User> userOptional = userRepository.findByProviderId(oAuth2UserInfo.getAttributes().get("user_id").toString());
         if(userOptional.isPresent()) {
             socialUser = userOptional.get();
             if (!socialUser.getProvider().equals(oAuth2UserRequest.getClientRegistration().getRegistrationId()))
@@ -75,16 +76,18 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         User user = new User();
 
         user.setProvider(oAuth2UserRequest.getClientRegistration().getRegistrationId());
-        user.setProviderId(oAuth2UserInfo.getId());
-        user.setName(oAuth2UserInfo.getName());
+        user.setProviderId(oAuth2UserInfo.getAttributes().get("user_id").toString());
+        user.setName(oAuth2UserInfo.getAttributes().get("first_name").toString() + " " + oAuth2UserInfo.getAttributes().get("last_name").toString());
         user.setEmail(oAuth2UserInfo.getEmail());
-        user.setImageUrl(oAuth2UserInfo.getImageUrl());
+        user.setRoles(Collections.singletonList(new Role(Role.ROLE_USER)));
+        user.setImageUrl(oAuth2UserInfo.getAttributes().get("photo_max").toString());
         return userRepository.save(user);
     }
 
     private User updateExistingUser(User existingUser, OAuth2UserInfo oAuth2UserInfo) {
-        existingUser.setName(oAuth2UserInfo.getName());
-        existingUser.setImageUrl(oAuth2UserInfo.getImageUrl());
+        existingUser.setName(oAuth2UserInfo.getAttributes().get("first_name").toString() + " " + oAuth2UserInfo.getAttributes().get("last_name").toString());
+        existingUser.setEmail(oAuth2UserInfo.getEmail());
+        existingUser.setImageUrl(oAuth2UserInfo.getAttributes().get("photo_max").toString());
         return userRepository.save(existingUser);
     }
 
@@ -98,14 +101,15 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String uri = oAuth2UserRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUri();
         String userNameAttributeName = oAuth2UserRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint().getUserNameAttributeName();
         uri = uri.replace("{user_id}", userNameAttributeName + "=" + oAuth2UserRequest.getAdditionalParameters().get(userNameAttributeName));
+        uri = uri.replace("{access_token}", oAuth2UserRequest.getAccessToken().getTokenValue());
 
         try {
-            ResponseEntity<Object> entity = template.exchange(uri, HttpMethod.GET, httpRequest, Object.class);
-            Map<String, Object> response = (Map<String, Object>) entity.getBody();
-            ArrayList<?> valueList = (ArrayList<?>) response.get("response");
+            ResponseEntity<Map> entity = template.exchange(uri, HttpMethod.GET, httpRequest, Map.class);
+            Map<?, ?> body = entity.getBody();
+            ArrayList<?> valueList = (ArrayList<?>) body.get("response");
             Map<String, Object> userAttributes = (Map<String, Object>) valueList.get(0);
             userAttributes.put(userNameAttributeName, oAuth2UserRequest.getAdditionalParameters().get(userNameAttributeName));
-
+            userAttributes.put("email", oAuth2UserRequest.getAdditionalParameters().get("email"));
             Set<GrantedAuthority> authorities = Collections.singleton(new OAuth2UserAuthority(userAttributes));
             return new DefaultOAuth2User(authorities, userAttributes, userNameAttributeName);
 

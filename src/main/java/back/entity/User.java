@@ -22,10 +22,6 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class User extends AbstractEntity{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(nullable = false)
     private String name;
 
@@ -52,14 +48,6 @@ public class User extends AbstractEntity{
             inverseJoinColumns = @JoinColumn(name = "user_id",
                     referencedColumnName = "id"))
     private List<Role> roles;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
