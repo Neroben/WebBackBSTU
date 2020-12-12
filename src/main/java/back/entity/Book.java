@@ -1,5 +1,9 @@
 package back.entity;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
@@ -7,6 +11,9 @@ import java.util.Set;
 
 @Entity
 @Table(name = "books")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Book extends AbstractEntity {
 
     @NotBlank
@@ -17,7 +24,7 @@ public class Book extends AbstractEntity {
     @Column(name = "path_logo")
     private String pathLogo;
 
-    @OneToMany(mappedBy = "bookId")
+    @OneToMany(mappedBy = "book")
     private List<PageBook> filePath;
 
     @ManyToMany
@@ -28,5 +35,9 @@ public class Book extends AbstractEntity {
     private Set<Genre> genre;
 
     private String author;
+
+    public Book(Long bookId) {
+        this.setId(bookId);
+    }
 
 }

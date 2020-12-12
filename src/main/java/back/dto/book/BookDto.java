@@ -2,6 +2,8 @@ package back.dto.book;
 
 import lombok.Data;
 
+import java.util.Set;
+
 @Data
 public class BookDto {
 
@@ -9,7 +11,9 @@ public class BookDto {
 
     private String description;
 
-    private Long author_id;
+    private String author;
+
+    private Set<Long> genreId;
 
     private Short sizeChapter;
 

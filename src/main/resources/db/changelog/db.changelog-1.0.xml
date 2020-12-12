@@ -82,7 +82,7 @@
             <column name="id" remarks="ID" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" primaryKeyName="page_book_pkey"/>
             </column>
-            <column name="file_path" type="varchar(512)">
+            <column name="text" type="TEXT">
                 <constraints nullable="false"/>
             </column>
             <column name="num_page" type="INTEGER">

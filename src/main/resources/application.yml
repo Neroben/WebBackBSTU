@@ -9,13 +9,15 @@ spring:
             client-secret: 4DQyjH3uP8VphRMfGOyg
             authorizationGrantType: authorization_code
             scope: email
-
   liquibase:
     changeLog: classpath:/db/changelog/db.changelog-master.xml
     url: ${spring.datasource.url}
     user: ${spring.datasource.username}
     password: ${spring.datasource.password}
     drop-first: false
+  servlet:
+    multipart:
+      location: C:\Users\sdont\IdeaProjects\WebBack\download\
 app:
   auth:
     tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
