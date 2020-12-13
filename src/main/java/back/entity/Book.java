@@ -25,7 +25,8 @@ public class Book extends AbstractEntity {
     private String pathLogo;
 
     @OneToMany(mappedBy = "book")
-    private List<PageBook> filePath;
+    private List<PageBook> pages;
+
 
     @ManyToMany
     @JoinTable(name = "book2genre",

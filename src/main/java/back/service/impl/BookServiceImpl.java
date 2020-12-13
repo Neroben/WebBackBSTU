@@ -7,6 +7,7 @@ import back.dto.book.ShortBookDto;
 import back.entity.Book;
 import back.entity.PageBook;
 import back.exception.BadRequestException;
+import back.exception.ResourceNotFoundException;
 import back.mappers.BookMapper;
 import back.mappers.PageBookMapper;
 import back.repository.BookRepository;
@@ -20,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -49,32 +51,39 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public List<ShortBookDto> getAllBook() {
-        return null;
+        List<Book> books = bookRepository.findAll();
+        return bookMapper.toShortBookDtos(books);
     }
 
     @Override
-    public ChapterBookDto getBookChapter(Long id, Integer chapter) {
-        return null;
+    public ChapterBookDto getBookChapter(Long id, Long chapter) {
+        PageBook pageBook = pageBookRepository.findByBook_IdAndNumPage(id, chapter).orElseThrow(() -> new ResourceNotFoundException("PageBook not found by book id = " + id + "chapter id " + chapter));
+        return pageBookMapper.toDto(pageBook);
     }
 
     @Override
     public void deleteBook(Long id) {
-
+        Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book", "id", id));
+        for(PageBook page: book.getPages()){
+            pageBookRepository.delete(page);
+        }
+        bookRepository.delete(book);
     }
 
     @Override
     public void deleteChapterBook(Long bookId, Long chapterId) {
-
+        PageBook pageBook = pageBookRepository.findByBook_IdAndNumPage(bookId, chapterId).orElseThrow(() -> new ResourceNotFoundException("PageBook not found by book id = " + bookId + "chapter id " + chapterId));
+        pageBookRepository.delete(pageBook);
     }
 
     @Override
     public Long updateBook(BookDto dto) {
-        return null;
+        return bookRepository.save(bookMapper.toEntity(dto)).getId();
     }
 
     @Override
-    public BookDto getBook(Long id) {
-        return null;
+    public Long updatePageBook(ChapterBookDto dto) {
+        return pageBookRepository.save(pageBookMapper.toEntity(dto)).getId();
     }
 
     @SneakyThrows

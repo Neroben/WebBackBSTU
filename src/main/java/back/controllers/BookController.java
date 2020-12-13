@@ -30,7 +30,7 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ChapterBookDto> getBookChapter(@PathVariable Long id, @RequestParam("chapter") Integer chapter) {
+    public ResponseEntity<ChapterBookDto> getBookChapter(@PathVariable Long id, @RequestParam("chapter") Long chapter) {
         return ResponseEntity.ok().body(bookService.getBookChapter(id, chapter));
     }
 
@@ -54,11 +54,6 @@ public class BookController {
     @GetMapping("/all")
     public ResponseEntity<List<ShortBookDto>> getAllBook() {
         return ResponseEntity.ok().body(bookService.getAllBook());
-    }
-
-    @GetMapping
-    public ResponseEntity<BookDto> getBook(@RequestParam Long id) {
-        return ResponseEntity.ok().body(bookService.getBook(id));
     }
 
 }

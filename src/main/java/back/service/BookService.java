@@ -15,15 +15,14 @@ public interface BookService {
 
     List<ShortBookDto> getAllBook();
 
-    ChapterBookDto getBookChapter(Long id, Integer chapter);
+    ChapterBookDto getBookChapter(Long id, Long chapter);
 
     void deleteBook(Long id);
 
     void deleteChapterBook(Long bookId, Long chapterId);
 
-
     Long updateBook(BookDto dto);
 
-    BookDto getBook(Long id);
+    Long updatePageBook(ChapterBookDto dto);
 
 }

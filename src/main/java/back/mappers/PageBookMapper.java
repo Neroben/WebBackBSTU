@@ -5,6 +5,7 @@ import back.entity.Book;
 import back.entity.PageBook;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.NullValueCheckStrategy;
 
 @Mapper
 public interface PageBookMapper {
@@ -19,5 +20,10 @@ public interface PageBookMapper {
             return null;
         return new Book(bookId);
     }
+
+    @Mapping(target = "bookId", source = "book.id", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
+    @Mapping(target = "numChapter", source = "numPage")
+    @Mapping(target = "text", source = "text")
+    ChapterBookDto toDto(PageBook pageBook);
 
 }

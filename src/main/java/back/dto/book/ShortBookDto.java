@@ -5,12 +5,14 @@ import lombok.Data;
 @Data
 public class ShortBookDto {
 
+    private Long id;
+
     private String name;
 
     private String description;
 
-    private Long author_id;
+    private String author;
 
-    private Short sizeChapter;
+    private int sizeChapter;
 
 }
