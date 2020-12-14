@@ -3,6 +3,8 @@ package back.service;
 import back.dto.book.BookDto;
 import back.dto.book.ChapterBookDto;
 import back.dto.book.ShortBookDto;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -24,5 +26,7 @@ public interface BookService {
     Long updateBook(BookDto dto);
 
     Long updatePageBook(ChapterBookDto dto);
+
+    Resource downloadPhoto(Long bookId);
 
 }

@@ -15,17 +15,28 @@ import back.repository.PageBookRepository;
 import back.service.BookService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.CacheControl;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class BookServiceImpl implements BookService {
 
     private final MultipartConfig multipartConfig;
@@ -84,6 +95,25 @@ public class BookServiceImpl implements BookService {
     @Override
     public Long updatePageBook(ChapterBookDto dto) {
         return pageBookRepository.save(pageBookMapper.toEntity(dto)).getId();
+    }
+
+    @SneakyThrows
+    @Override
+    public Resource downloadPhoto(Long bookId) {
+        log.info("download id: [{}] ", bookId);
+        Book book = bookRepository.findById(bookId).orElseThrow(() -> new ResourceNotFoundException("Photo logo", "bookId", bookId));
+        File file = new File(multipartConfig.getLocation() + book.getPathLogo());
+        String mimeType = Files.probeContentType(file.toPath());
+        if (mimeType == null) {
+            throw new ResourceNotFoundException("Photo", "id", bookId.toString() + " is broken mimeType = null");
+        }
+        Path path = Paths.get(file.getAbsolutePath());
+        try {
+            ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
+            return resource;
+        } catch (NoSuchFileException ex){
+            throw new ResourceNotFoundException("Photo", "bookId", bookId);
+        }
     }
 
     @SneakyThrows

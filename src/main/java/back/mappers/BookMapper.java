@@ -34,6 +34,7 @@ public interface BookMapper {
     @Mapping(target = "description", source = "description")
     @Mapping(target = "author", source = "author")
     @Mapping(target = "sizeChapter", expression = "java((book.getPages() == null) ? 0:book.getPages().size())")
+    @Mapping(target = "time", source = "time")
     ShortBookDto toShortBookDto(Book book);
 
     default List<ShortBookDto> toShortBookDtos(List<Book> books) {

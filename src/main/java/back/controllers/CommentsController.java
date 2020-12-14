@@ -1,6 +1,7 @@
 package back.controllers;
 
 import back.dto.CommentDto;
+import back.entity.Comment;
 import back.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class CommentsController {
     private final CommentService commentService;
 
     @GetMapping("/last")
-    public ResponseEntity<List<CommentDto>> getLastComments(){
+    public ResponseEntity<List<Comment>> getLastComments(){
         return ResponseEntity.ok(commentService.getLastComments());
     }
 

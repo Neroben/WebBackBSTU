@@ -52,6 +52,7 @@
             <column name="id" remarks="ID" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true" primaryKeyName="book_pkey"/>
             </column>
+            <column name="time" type="varchar(30)"/>
             <column name="name" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
@@ -85,6 +86,7 @@
             <column name="text" type="TEXT">
                 <constraints nullable="false"/>
             </column>
+            <column name="time" type="varchar(30)"/>
             <column name="num_page" type="INTEGER">
                 <constraints nullable="false"/>
             </column>
@@ -103,6 +105,17 @@
             <column name="name">ROLE_ADMIN</column>
             <column name="id">2</column>
         </insert>
+    </changeSet>
+
+    <changeSet id="03" author="Dontsov">
+        <createTable tableName="comments">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="author" type="varchar(100)"/>
+            <column name="time" type="varchar(100)"/>
+            <column name="text" type="varchar(512)"/>
+        </createTable>
     </changeSet>
 
 </databaseChangeLog>

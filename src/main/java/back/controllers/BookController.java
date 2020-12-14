@@ -5,12 +5,16 @@ import back.dto.book.ChapterBookDto;
 import back.dto.book.ShortBookDto;
 import back.service.BookService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequiredArgsConstructor
@@ -54,6 +58,15 @@ public class BookController {
     @GetMapping("/all")
     public ResponseEntity<List<ShortBookDto>> getAllBook() {
         return ResponseEntity.ok().body(bookService.getAllBook());
+    }
+
+    @GetMapping(value = "/logo/{bookId}",
+            produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<Resource> download(@PathVariable(value = "bookId") Long id) {
+        Resource resource = bookService.downloadPhoto(id);
+        return ResponseEntity.ok()
+                .cacheControl(CacheControl.maxAge(60, TimeUnit.SECONDS).cachePublic())
+                .body(resource);
     }
 
 }

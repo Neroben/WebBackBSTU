@@ -27,6 +27,7 @@ public class Book extends AbstractEntity {
     @OneToMany(mappedBy = "book")
     private List<PageBook> pages;
 
+    private String time;
 
     @ManyToMany
     @JoinTable(name = "book2genre",

@@ -13,6 +13,7 @@ public class ShortBookDto {
 
     private String author;
 
-    private int sizeChapter;
+    private String time;
 
+    private int sizeChapter;
 }
