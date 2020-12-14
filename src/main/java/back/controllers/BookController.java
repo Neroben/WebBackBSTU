@@ -33,8 +33,8 @@ public class BookController {
         return ResponseEntity.ok().body(bookService.addPageBook(chapter));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ChapterBookDto> getBookChapter(@PathVariable Long id, @RequestParam("chapter") Long chapter) {
+    @GetMapping("/chapter/{id}/{chapter}")
+    public ResponseEntity<ChapterBookDto> getBookChapter(@PathVariable Long id, @PathVariable("chapter") Long chapter) {
         return ResponseEntity.ok().body(bookService.getBookChapter(id, chapter));
     }
 

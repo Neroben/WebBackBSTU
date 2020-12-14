@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 public class PageBook extends AbstractEntity {
 
     @NotBlank private String text;
-    @NotNull private Integer numPage;
+    @NotNull private Long numPage;
 
     @ManyToOne
     @JoinColumn(name = "book_id")
