@@ -8,5 +8,6 @@ public class ChapterBookDto {
     private Long bookId;
     private Long numChapter;
     private String text;
+    private Long sizeChapters;
 
 }

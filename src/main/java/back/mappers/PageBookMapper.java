@@ -24,6 +24,7 @@ public interface PageBookMapper {
     @Mapping(target = "bookId", source = "book.id", nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS)
     @Mapping(target = "numChapter", source = "numPage")
     @Mapping(target = "text", source = "text")
+    @Mapping(target = "sizeChapters", expression = "java((pageBook.getBook() == null || pageBook.getBook().getPages() == null) ? 0L : pageBook.getBook().getPages().size())")
     ChapterBookDto toDto(PageBook pageBook);
 
 }
