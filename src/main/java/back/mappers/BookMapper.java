@@ -1,12 +1,11 @@
 package back.mappers;
 
 import back.dto.book.BookDto;
-import back.dto.book.ChapterBookDto;
 import back.dto.book.ShortBookDto;
 import back.entity.Book;
 import back.entity.Genre;
-import back.entity.PageBook;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 import java.util.HashSet;
 import java.util.List;

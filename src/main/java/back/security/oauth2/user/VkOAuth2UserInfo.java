@@ -2,7 +2,6 @@ package back.security.oauth2.user;
 
 import java.util.Map;
 
-//todo поправить
 public class VkOAuth2UserInfo extends OAuth2UserInfo{
 
     public VkOAuth2UserInfo(Map<String, Object> attributes) {

@@ -1,0 +1,121 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+    <property name="blob_type" value="bytea" dbms="postgresql"/>
+    <property name="blob_type" value="blob" dbms="h2"/>
+
+    <changeSet id="01" author="Dontsov">
+        <createTable tableName="users">
+            <column name="id" autoIncrement="true" type="BIGINT" >
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="image_url" type="varchar(512)"/>
+            <column name="email" type="varchar(100)">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="email_verified" type="BOOLEAN">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="varchar(512)"/>
+            <column name="provider" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="provider_id" type="varchar(60)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="roles">
+            <column name="id" remarks="ID" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="role_pkey"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints unique="true" uniqueConstraintName="role_name_uk"/>
+            </column>
+        </createTable>
+        <createTable tableName="user2role">
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="user2role_pkey"
+                             references="users(id)" foreignKeyName="user2role_user_fk"
+                />
+            </column>
+            <column name="role_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="user2role_pkey"
+                             references="roles(id)" foreignKeyName="user2role_role_fk"/>
+            </column>
+        </createTable>
+        <createTable tableName="books">
+            <column name="id" remarks="ID" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="book_pkey"/>
+            </column>
+            <column name="time" type="varchar(30)"/>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="path_logo" type="varchar(255)"/>
+            <column name="description" type="varchar(2048)"/>
+            <column name="author" type="varchar(512)"/>
+        </createTable>
+        <createTable tableName="genres">
+            <column name="id" remarks="ID" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="genre_pkey"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints unique="true" uniqueConstraintName="genres_name_uk"/>
+            </column>
+        </createTable>
+        <createTable tableName="book2genre">
+            <column name="book_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="book2genre_pkey"
+                             references="users(id)" foreignKeyName="book2genre_book_fk"
+                />
+            </column>
+            <column name="genre_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="book2genre_pkey"
+                             references="roles(id)" foreignKeyName="book2genre_genre_fk"/>
+            </column>
+        </createTable>
+        <createTable tableName="page_books">
+            <column name="id" remarks="ID" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="page_book_pkey"/>
+            </column>
+            <column name="text" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="time" type="varchar(30)"/>
+            <column name="num_page" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="book_id" type="BIGINT">
+                <constraints nullable="false" references="books(id)" foreignKeyName="page_books_fk"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="02" author="Dontsov">
+        <insert tableName="roles">
+            <column name="name">ROLE_USER</column>
+            <column name="id">1</column>
+        </insert>
+        <insert tableName="roles">
+            <column name="name">ROLE_ADMIN</column>
+            <column name="id">2</column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="03" author="Dontsov">
+        <createTable tableName="comments">
+            <column name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="author" type="varchar(100)"/>
+            <column name="time" type="varchar(100)"/>
+            <column name="text" type="varchar(512)"/>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

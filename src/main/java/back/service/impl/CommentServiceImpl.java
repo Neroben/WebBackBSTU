@@ -1,6 +1,5 @@
 package back.service.impl;
 
-import back.dto.CommentDto;
 import back.entity.Comment;
 import back.repository.CommentRepository;
 import back.service.CommentService;

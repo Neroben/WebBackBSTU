@@ -1,15 +1,14 @@
 package back.security;
 
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
-import org.springframework.stereotype.Component;
 
 public class CustomOAuth2Provider {
+
+    private CustomOAuth2Provider(){
+    }
 
     public static ClientRegistration getVk() {
         ClientRegistration.Builder builder = ClientRegistration.withRegistrationId("vk");

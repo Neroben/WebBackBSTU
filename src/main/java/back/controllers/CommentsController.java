@@ -1,6 +1,5 @@
 package back.controllers;
 
-import back.dto.CommentDto;
 import back.entity.Comment;
 import back.service.CommentService;
 import lombok.RequiredArgsConstructor;

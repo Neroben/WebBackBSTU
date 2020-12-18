@@ -18,9 +18,6 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.CacheControl;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,7 +29,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -109,8 +105,7 @@ public class BookServiceImpl implements BookService {
         }
         Path path = Paths.get(file.getAbsolutePath());
         try {
-            ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
-            return resource;
+            return new ByteArrayResource(Files.readAllBytes(path));
         } catch (NoSuchFileException ex){
             throw new ResourceNotFoundException("Photo", "bookId", bookId);
         }

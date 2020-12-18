@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -24,7 +25,7 @@ public class BookController {
     private final BookService bookService;
 
     @PostMapping
-    public ResponseEntity<Long> addBook(@RequestBody BookDto book, @RequestParam(required = false)MultipartFile logo) {
+    public ResponseEntity<Long> addBook(@RequestBody @Valid BookDto book, @RequestParam(required = false)MultipartFile logo) {
         return ResponseEntity.ok().body(bookService.createBook(book, logo));
     }
 
