@@ -36,6 +36,6 @@ public class CustomAuthorizationRequestResolver implements OAuth2AuthorizationRe
 
     private OAuth2AuthorizationRequest customizeAuthorizationRequest(OAuth2AuthorizationRequest req) {
         return OAuth2AuthorizationRequest
-                .from(req).state("xyz").build();
+                .from(req).build();
     }
 }

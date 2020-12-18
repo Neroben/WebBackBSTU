@@ -6,7 +6,7 @@ spring:
         registration:
           vk:
             client-id: 7004922
-            client-secret: 4DQyjH3uP8VphRMfGOyg
+            client-secret: Ch406ey7X5EK6WfYxIxl
             authorizationGrantType: authorization_code
             scope: email
   liquibase:
@@ -14,7 +14,7 @@ spring:
     url: ${spring.datasource.url}
     user: ${spring.datasource.username}
     password: ${spring.datasource.password}
-    drop-first: false
+    drop-first: true
   servlet:
     multipart:
       location: C:\Users\sdont\IdeaProjects\WebBack\download\
