@@ -26,7 +26,7 @@ spring:
             non_contextual_creation: true
   servlet:
     multipart:
-      location: C:\Users\sdont\IdeaProjects\WebBack\download\
+      location: C:\Users\sdont\IdeaProjects\WebBack\downloadtest\
 app:
   auth:
     tokenSecret: 926D96C90030DD58429D2751AC1BDBBC
