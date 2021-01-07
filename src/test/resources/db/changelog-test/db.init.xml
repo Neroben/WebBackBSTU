@@ -257,6 +257,14 @@
             <column name="num_page">0</column>
             <column name="book_id">3</column>
         </insert>
+        <insert tableName="books">
+            <column name="id">4</column>
+            <column name="name">Книга</column>
+            <column name="description">Текст</column>
+            <column name="time">14.12.2020</column>
+            <column name="path_logo">insert\unknown-book-263x300.jpg</column>
+            <column name="author">Книга</column>
+        </insert>
     </changeSet>
 
 </databaseChangeLog>

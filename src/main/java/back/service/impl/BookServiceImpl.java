@@ -65,12 +65,14 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Transactional
     public ChapterBookDto getBookChapter(Long id, Long chapter) {
         PageBook pageBook = pageBookRepository.findByBook_IdAndNumPage(id, chapter).orElseThrow(() -> new ResourceNotFoundException("PageBook not found by book id = " + id + "chapter id " + chapter));
         return pageBookMapper.toDto(pageBook);
     }
 
     @Override
+    @Transactional
     public void deleteBook(Long id) {
         Book book = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Book", "id", id));
         for(PageBook page: book.getPages()){

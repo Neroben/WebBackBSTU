@@ -56,25 +56,42 @@ class BookServiceImplTest extends BaseTest {
 
     @Test
     void getBookChapter() {
+        ChapterBookDto dto = bookService.getBookChapter(3L, 0L);
+        Assertions.assertNotNull(dto);
     }
 
     @Test
     void deleteBook() {
+        bookService.deleteBook(4L);
     }
 
     @Test
     void deleteChapterBook() {
+        bookService.deleteChapterBook(3L, 0L);
     }
 
     @Test
     void updateBook() {
+        BookDto dto = new BookDto();
+        dto.setId(1L);
+        dto.setName("test");
+        dto.setDescription("test");
+        Long id = bookService.updateBook(dto);
+        Assertions.assertNotNull(id);
     }
 
     @Test
     void updatePageBook() {
+        ChapterBookDto dto = new ChapterBookDto();
+        dto.setBookId(1L);
+        dto.setText("test");
+        dto.setNumChapter(1L);
+        Long id = bookService.updatePageBook(dto);
+        Assertions.assertNotNull(id);
     }
 
     @Test
     void downloadPhoto() {
+        Assertions.assertNotNull(bookService.downloadPhoto(2L));
     }
 }
